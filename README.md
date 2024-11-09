@@ -120,17 +120,17 @@ ORDER BY category;
 
 7. **Write a SQL query to calculate the average sale for each month. Find out best selling month in each year**:
 ```sql
-SELECT year, 
-		month, 
-		avg_sales 
+SELECT  year, 
+	month, 
+	avg_sales 
 FROM
-		(SELECT 
-			EXTRACT(YEAR FROM sales_date)AS year,
-			EXTRACT(MONTH FROM sales_date)AS month,
-			AVG(total_sales) AS avg_sales,
-			RANK() OVER(PARTITION BY EXTRACT(YEAR FROM sales_date) ORDER BY AVG(total_sales)DESC) AS ranking		
-		 FROM sales
-			GROUP BY year, month)
+	(SELECT 
+		EXTRACT(YEAR FROM sales_date)AS year,
+		EXTRACT(MONTH FROM sales_date)AS month,
+		AVG(total_sales) AS avg_sales,
+		RANK() OVER(PARTITION BY EXTRACT(YEAR FROM sales_date) ORDER BY AVG(total_sales)DESC) AS ranking		
+	FROM sales
+	GROUP BY year, month)
 WHERE ranking = 1;
 ```
 
@@ -147,7 +147,7 @@ LIMIT 5;
 9. **Write a SQL query to find the number of unique customers who purchased items from each category.**:
 ```sql
 SELECT  category, 
-		COUNT(DISTINCT customer_id) AS customer_id
+	COUNT(DISTINCT customer_id) AS customer_id
 FROM sales
 GROUP BY category;
 ```
@@ -157,15 +157,15 @@ GROUP BY category;
 WITH shift_sales AS
 (
 SELECT *,
-		CASE
-		WHEN EXTRACT(HOUR FROM sales_time)<=12 THEN 'Morning'
-		WHEN EXTRACT(HOUR FROM sales_time) BETWEEN 12 AND 17 THEN 'Afternoon'
-		ELSE 'Evening'
-		END AS Shift
+	CASE
+	WHEN EXTRACT(HOUR FROM sales_time)<=12 THEN 'Morning'
+	WHEN EXTRACT(HOUR FROM sales_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+	ELSE 'Evening'
+	END AS Shift
 FROM sales)
 
 SELECT 	shift, 
-		count(*) AS total_orders
+	count(*) AS total_orders
 FROM shift_sales
 GROUP BY shift;
 ```
